@@ -1,3 +1,7 @@
+##
+#  파일 관련 기능을 제공하는 클래스
+##
+
 def isVaild(name):
     try:
         file = open(name, 'r')
