@@ -21,6 +21,12 @@ class Json:
         else:
             self.data[key].append(value)
 
+    def getData(self, key):
+        return self.data[key]
+
+    def setData(self, key, value):
+        self.data[key] = value
+
     def resetData(self):
         self.data = {}
 

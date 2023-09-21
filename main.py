@@ -29,24 +29,24 @@ def initConfig():
 
     config.saveData()
 
-def readConfig(read):
-    return config.loadData()[read]
-
 def checkUpdate():
     currentTime = datetime.now()
-    updatedTime = readConfig("updateLast") 
+    updatedTime = config.getData("updateLast")
     updatedTime = time.mktime(datetime.strptime(updatedTime, DATE_FORMAT).timetuple())
     updatedTime = datetime.fromtimestamp(updatedTime)
     diffDay = (currentTime - updatedTime).days
 
+    say("Checking Updates...")
     if (diffDay >= config.loadData()['updateCycle']['day']):
-        say("renewal data...")
+        say("Renewal data...")
         try:
             Crawling.run()
         except Exception as error:
-            say("Data Crawling Error: " + error)
+            say("Data Crawling Error: " + str(error))
+            return
 
         say("Data Crawling Success...!")
+        config.setData("updateLast", currentTime)
 
 def main():
     configVaild = DataManager.isVaild("config.json")
@@ -60,7 +60,7 @@ def main():
 
     while (True):
         checkUpdate()
-        time.sleep(10)
+        time.sleep(60)
     
     
 if __name__ == '__main__':
