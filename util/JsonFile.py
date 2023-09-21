@@ -14,13 +14,18 @@ class Json:
         self.name = name
         if (DataManager.isVaild(self.locate) == True):
             self.data = self.loadData()
-        self.saveData()
 
     def addData(self, key, value):
         if (key not in self.data):
             self.data[key] = value
         else:
             self.data[key].append(value)
+
+    def getData(self, key):
+        return self.data[key]
+
+    def setData(self, key, value):
+        self.data[key] = value
 
     def resetData(self):
         self.data = {}
