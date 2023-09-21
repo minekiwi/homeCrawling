@@ -42,12 +42,13 @@ CRAWL_FORM_DATA = {
 # Login Function
 def login():
     session = requests.Session()
+    session.post(LOGIN_URL, data=LOGIN_DATA)
     return session
 
 # Crawl Function
 def run():
     session = login()
-
+    
     res = session.post(CRAWL_URL, data=CRAWL_FORM_DATA)
     html = res.text
     content = res.content
