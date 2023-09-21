@@ -46,7 +46,8 @@ def checkUpdate():
             return
 
         say("Data Crawling Success...!")
-        config.setData("updateLast", currentTime)
+        config.setData("updateLast", datetime.strftime(currentTime, DATE_FORMAT))
+        config.saveData()
 
 def main():
     configVaild = DataManager.isVaild("config.json")
