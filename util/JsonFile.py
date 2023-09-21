@@ -14,7 +14,6 @@ class Json:
         self.name = name
         if (DataManager.isVaild(self.locate) == True):
             self.data = self.loadData()
-        self.saveData()
 
     def addData(self, key, value):
         if (key not in self.data):

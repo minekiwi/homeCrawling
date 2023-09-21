@@ -9,9 +9,13 @@ import system.Crawling as Crawling
 from util.JsonFile import Json
 
 # < final datas >
-DATE_FORMAT = '%Y-%m-%d %Hh'
+DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 config = Json("config", '')
+
+def say(message):
+    time = datetime.strftime(datetime.now(), DATE_FORMAT)
+    print("[CONSOLE] (" + time + ") - " + message)
 
 def initConfig():
     time = datetime.now()
@@ -36,17 +40,27 @@ def checkUpdate():
     diffDay = (currentTime - updatedTime).days
 
     if (diffDay >= config.loadData()['updateCycle']['day']):
-        print("renewal crawl data...")
+        say("renewal data...")
+        try:
+            Crawling.run()
+        except Exception as error:
+            say("Data Crawling Error: " + error)
+
+        say("Data Crawling Success...!")
 
 def main():
     configVaild = DataManager.isVaild("config.json")
 
-    print("initalizing...")
+    say("initalizing...")
 
     if (configVaild == False):
         initConfig()
 
-    print("done...!")
+    say("done...!")
+
+    while (True):
+        checkUpdate()
+        time.sleep(10)
     
     
 if __name__ == '__main__':
