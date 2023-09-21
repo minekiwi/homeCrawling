@@ -42,10 +42,6 @@ CRAWL_FORM_DATA = {
 # Login Function
 def login():
     session = requests.Session()
-    if response.status_code == 200:
-        print('login Success...!')
-    else:
-        print('login Failed...')
     return session
 
 # Crawl Function
