@@ -1,5 +1,5 @@
 # < import class >
-import util.DataManager as DataManager
+import util.FileUtil as FileUtil
 
 import json
 
@@ -12,7 +12,7 @@ class Json:
         self.data = {}
         self.locate = locate + name + ".json"
         self.name = name
-        if (DataManager.isVaild(self.locate) == True):
+        if (FileUtil.isVaild(self.locate) == True):
             self.data = self.loadData()
 
     def addData(self, key, value):
