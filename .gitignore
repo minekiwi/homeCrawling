@@ -1,4 +1,5 @@
 .env
+.pyc
 data/
 trash/
 __pycache__

@@ -5,8 +5,10 @@ from dotenv import load_dotenv
 import os 
 
 # < import class >
-import util.DataManager as DataManager
-from util.JsonFile import Json
+from util.JsonUtil import Json
+import util.TimeUtil as TimeUtil
+import util.MongoUtil as MongoUtil
+import main as Main
 
 # < final Datas >
 
@@ -33,11 +35,16 @@ LOGIN_DATA = {
     'cyber_pw': USER_PW,
 }
 
-# < Data Crawl Information >
+# Data Crawl Information
 CRAWL_URL = 'https://www.welfare.mil.kr/content/content.do?m_code=1222'
 CRAWL_FORM_DATA = {
     'forwardName': 'apartment.aptGList'
 }
+
+# Database Information
+DB_NAME = "test"
+COLLECTION_NAME = "subscriptionboq"
+COLLECTION = MongoUtil.getCollection(DB_NAME, COLLECTION_NAME)
 
 # Login Function
 def login():
@@ -91,5 +98,16 @@ def run():
 
         arr.append(dic)
 
+        # Database Update 
+        MongoUtil.update(COLLECTION, {"number":number}, {"$set":dic}, True)
+        Main.say("Database Update Complete: " + number)
+            
     crawlData.addData("data", arr)
     crawlData.saveData()
+
+    # Database Old Data Delete
+    for item in COLLECTION.find():
+        time = item['confirmDate']
+        if TimeUtil.getNowDiffDay(time, '%Y.%m.%d') >= 30:
+            MongoUtil.delete(COLLECTION, {"number":item['number']})
+            Main.say("Database Delete Complete: " + item['number'])
