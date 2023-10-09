@@ -1,12 +1,12 @@
 # < import modules >
 import time
 from datetime import datetime
-from datetime import date
 
 # < import class >
-import util.DataManager as DataManager
+import util.FileUtil as FileUtil
+import util.TimeUtil as TimeUtil
 import system.Crawling as Crawling
-from util.JsonFile import Json
+from util.JsonUtil import Json
 
 # < final datas >
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -21,7 +21,7 @@ def initConfig():
     time = datetime.now()
 
     config.resetData()
-    updateCycle = {"day":7}
+    updateCycle = {"day":1}
     config.addData("updateCycle", updateCycle)
     
     str_datetime = datetime.strftime(time, DATE_FORMAT)
@@ -32,9 +32,7 @@ def initConfig():
 def checkUpdate():
     currentTime = datetime.now()
     updatedTime = config.getData("updateLast")
-    updatedTime = time.mktime(datetime.strptime(updatedTime, DATE_FORMAT).timetuple())
-    updatedTime = datetime.fromtimestamp(updatedTime)
-    diffDay = (currentTime - updatedTime).days
+    diffDay = TimeUtil.getNowDiffDay(updatedTime, DATE_FORMAT)
 
     say("Checking Updates...")
     if (diffDay >= config.loadData()['updateCycle']['day']):
@@ -50,7 +48,7 @@ def checkUpdate():
         config.saveData()
 
 def main():
-    configVaild = DataManager.isVaild("config.json")
+    configVaild = FileUtil.isVaild("config.json")
 
     say("initalizing...")
 
